@@ -2,7 +2,7 @@
     <div class="home-page">
       <div id="app">
         <n-button strong secondary type="info" @click="handleClick">
-          Upload
+          Add new Word
         </n-button>
         <FlashcardContainer />
         <n-drawer
@@ -10,7 +10,7 @@
           :close-on-esc="false"
           :mask-closable="false"
           @update:show="onUpdateDrawer"
-          width="800px"
+          width="500px"
           placement="left"
         >
           <n-drawer-content title="Upload Data" closable :native-scrollbar="false">
