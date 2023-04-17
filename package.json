@@ -1,0 +1,35 @@
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.vue src/**/*.js src/**/*.vue",
+    "lint-fix": "eslint --fix --ignore-path .gitignore --ext .js,.vue src/**/*.js src/**/*.vue"
+  },
+  
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "@vicons/ionicons5": "^0.12.0",
+    "firebase": "^9.19.1",
+    "moment": "^2.29.4",
+    "unplugin-vue-components": "^0.22.12",
+    "vfonts": "^0.0.3",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.11.0",
+    "naive-ui": "^2.34.3",
+    "prettier": "^2.8.7",
+    "vite": "^4.0.0",
+    "vite-plugin-compression": "^0.5.1"
+  }
+}
