@@ -1,9 +1,9 @@
 <template>
   <div>
     <Flashcard
-      v-if="currentCardIndex >= 0 && currentCardIndex < flashcards.length"
-      :question="flashcards[currentCardIndex].question"
-      :answer="flashcards[currentCardIndex].answer"
+      v-if="currentCardIndex >= 0 && currentCardIndex < questions.length"
+      :question="questions[currentCardIndex].question"
+      :answer="questions[currentCardIndex].answer"
       />
     <div class="question-number">{{ currentQuestionNumber }}/{{ totalQuestions }}</div>
     <div class="button-container">
@@ -77,14 +77,14 @@ export default {
       this.showAnswer = false;
       this.flip = false;
       this.currentCardIndex =
-        (this.currentCardIndex + 1) % this.flashcards.length;
+        (this.currentCardIndex + 1) % this.questions.length;
     },
     previousCard() {
       this.showAnswer = false;
       this.flip = false;
       this.currentCardIndex =
-        (this.currentCardIndex - 1 + this.flashcards.length) %
-        this.flashcards.length;
+        (this.currentCardIndex - 1 + this.questions.length) %
+        this.questions.length;
     },
   },
   computed: {
@@ -92,9 +92,14 @@ export default {
       return this.currentCardIndex + 1;
     },
     totalQuestions() {
-      return this.flashcards.length;
+      return this.questions.length;
     },
   },
+  props: {
+      questions: {
+        type: Array
+      }
+    }
 };
 </script>
   

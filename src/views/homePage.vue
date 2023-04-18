@@ -4,7 +4,9 @@
     <n-col :span="18">
       <div class="home-page">
         <div id="app">
-          <FlashcardContainer />
+          <flashcard-container
+              :questions="questions"
+            ></flashcard-container>
         </div>
       </div>
     </n-col>
@@ -15,7 +17,8 @@
 <script>
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
-import FlashcardContainer from "../components/FlashcardContainer.vue";
+import { getDatabase, ref as dbRef, onValue} from 'firebase/database';
+import { h, ref } from "vue";
 
 
 const themeOverrides = {
@@ -32,17 +35,31 @@ const themeOverrides = {
   }
 };
 export default {
-  components: {
-    FlashcardContainer,
-  },
   data() {
     return {
+      questions : [],
       themeOverrides
     };
   },
   methods: {
+    getGuestionsList () {
+        // Get a reference to the Firebase Realtime Database
+        const db = getDatabase();
+
+        // Create a reference to the "studymate" node in the database
+        const itemsRef = dbRef(db, 'studymate');
+
+        // Set up a listener for changes to the "items" node
+        onValue(itemsRef, (snapshot) => {
+            this.questions = Object.values(snapshot.val());
+        });
+        return {
+            questions: ref(this.questions)
+        };
+    },
   },
   mounted() {
+    this.getGuestionsList()
   }
 };
 </script>
