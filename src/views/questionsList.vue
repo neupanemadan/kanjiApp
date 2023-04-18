@@ -44,7 +44,7 @@ import "vfonts/FiraCode.css";
 import { AddCircleOutline } from "@vicons/ionicons5";
 import { useMessage, NAlert } from "naive-ui";
 import { h, ref } from "vue";
-import { getDatabase, ref as dbRef, get, onValue, set, push, remove } from 'firebase/database';
+import { getDatabase, ref as dbRef, child, onValue, set, push, remove } from 'firebase/database';
 
 const renderMessage = props => {
   const { type } = props;
@@ -143,13 +143,17 @@ export default {
       // Get a reference to the Firebase Realtime Database
       const db = getDatabase();
 
-      // Create a reference to the "items" node in the database
-      const itemRef = dbRef(db, `studymate/${itemId}`);
+      // Create a reference to the "studymate" node in the database
+      const itemsRef = dbRef(db, 'studymate');
+
+      // Create a reference to the record using the itemId
+      const itemToDeleteRef = child(itemsRef, itemId);
 
       console.log('itemRef', itemId)
+      console.log('itemRef', itemToDeleteRef)
 
       // Remove the item from the database
-      remove(itemRef)
+      remove(itemToDeleteRef)
         .then(() => {
           this.message.success("Question deleted successfully. ", {
               render: renderMessage,

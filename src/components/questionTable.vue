@@ -101,8 +101,7 @@
               negativeText: "Cancel",
               onPositiveClick: () => {
                 const eventName =  "question:delete";
-                console.log(row)
-                this.$emit(eventName, row.id);
+                this.$emit(eventName, row.itemId);
               },
             })
           }

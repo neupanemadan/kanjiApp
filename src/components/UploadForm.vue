@@ -79,11 +79,16 @@ export default defineComponent({
     },
     getFormData() {
       const data = {
+        itemId: this.generateItemId(), // generate a unique ID for the item
         question: this.deck.question,
         answer: this.deck.answer
       };
       return data;
+    },
+    generateItemId() {
+      // generate a unique ID using the current timestamp
+      return Date.now().toString();
     }
-  }
+      }
 });
 </script>
