@@ -100,7 +100,9 @@
               positiveText: "Yes",
               negativeText: "Cancel",
               onPositiveClick: () => {
-                this.questionDelete(row.id)
+                const eventName =  "question:delete";
+                console.log(row)
+                this.$emit(eventName, row.id);
               },
             })
           }
@@ -124,10 +126,6 @@
         type: Array
       },
       updateRow: {
-        type: Function,
-        required: true
-      },
-      questionDelete: {
         type: Function,
         required: true
       }

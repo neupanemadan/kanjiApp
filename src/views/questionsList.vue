@@ -15,6 +15,7 @@
         </n-space>
         <questionTable
             :questions="questions"
+            @question:delete="onQuestionDelete"
         />
         <n-drawer
           v-model:show="active"
@@ -43,7 +44,7 @@ import "vfonts/FiraCode.css";
 import { AddCircleOutline } from "@vicons/ionicons5";
 import { useMessage, NAlert } from "naive-ui";
 import { h, ref } from "vue";
-import { getDatabase, ref as dbRef, get, onValue, set, push } from 'firebase/database';
+import { getDatabase, ref as dbRef, get, onValue, set, push, remove } from 'firebase/database';
 
 const renderMessage = props => {
   const { type } = props;
@@ -136,6 +137,28 @@ export default {
         })
         .catch((error) => {
             console.error('Error saving data: ', error);
+        });
+    },
+    onQuestionDelete (itemId) {
+      // Get a reference to the Firebase Realtime Database
+      const db = getDatabase();
+
+      // Create a reference to the "items" node in the database
+      const itemRef = dbRef(db, `studymate/${itemId}`);
+
+      console.log('itemRef', itemId)
+
+      // Remove the item from the database
+      remove(itemRef)
+        .then(() => {
+          this.message.success("Question deleted successfully. ", {
+              render: renderMessage,
+              closable: true,
+              duration: 5000
+            });
+        })
+        .catch((error) => {
+          console.error('Error deleting item: ', error);
         });
     }
   },
