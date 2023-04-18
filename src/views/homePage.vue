@@ -1,27 +1,33 @@
 <template>
-    <div class="home-page">
-      <div id="app">
-        <n-button strong secondary type="info" @click="handleClick">
-          Add new Word
-        </n-button>
-        <FlashcardContainer />
-        <n-drawer
-          v-model:show="active"
-          :close-on-esc="false"
-          :mask-closable="false"
-          @update:show="onUpdateDrawer"
-          width="500px"
-          placement="left"
-        >
-          <n-drawer-content title="Upload Data" closable :native-scrollbar="false">
-            <upload-form
-              @data:create="onDataCreate"
-              :loading="loading"
-            ></upload-form>
-          </n-drawer-content>
-        </n-drawer>
+  <n-row gutter="12">
+    <n-col :span="4"></n-col>
+    <n-col :span="18">
+      <div class="home-page">
+        <div id="app">
+          <n-button strong secondary type="info" @click="handleClick">
+            Add new Word
+          </n-button>
+          <FlashcardContainer />
+          <n-drawer
+            v-model:show="active"
+            :close-on-esc="false"
+            :mask-closable="false"
+            @update:show="onUpdateDrawer"
+            width="500px"
+            placement="left"
+          >
+            <n-drawer-content title="Upload Data" closable :native-scrollbar="false">
+              <upload-form
+                @data:create="onDataCreate"
+                :loading="loading"
+              ></upload-form>
+            </n-drawer-content>
+          </n-drawer>
+        </div>
       </div>
-    </div>
+    </n-col>
+    <n-col :span="3"></n-col>
+  </n-row>
 </template>
 
 <script>
@@ -71,7 +77,7 @@ export default {
   min-width: 320px;
   --header-height: 64px;
   --content-width: 100vw;
-  --content-max-width: calc(100vw - 80vw);
+  --content-max-width: calc(100vw - 32px);
 }
 
 body {

@@ -1,7 +1,9 @@
 <template>
-    <div class="home-page">
+  <n-row gutter="12">
+    <n-col :span="18">
+      <div class="home-page">
       <div id="app">
-        <n-space justify="end" style="margin-bottom:0.8rem; margin-right:4vw">
+        <n-space justify="start" style="margin-bottom:0.8rem;">
           <n-button :disabled="disabled" @click="onClickCreate" type="primary" size="medium">
               <template #icon>
                 <n-icon>
@@ -31,6 +33,8 @@
         </n-drawer>
       </div>
     </div>
+    </n-col>
+  </n-row>
 </template>
 
 <script>

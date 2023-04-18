@@ -3,28 +3,35 @@
     :locale="config.jaJP"
     :theme-overrides="themeOverrides"
     :date-locale="config.dateJaJP"
-  ><n-dialog-provider>
-    <n-row class="navbar">
-      <n-col :span="6" :offset="6">
-        <h2>studyMate</h2>
+  >
+  <n-dialog-provider>
+    <n-row gutter="12">
+      <n-col :span="6"></n-col>
+      <n-col :span="18">
+        <n-row class="navbar">
+          <n-col :span="6">
+            <h2>studyMate</h2>
+          </n-col>
+          <n-col :span="12" :offset="6" class="menus">
+            <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
+          </n-col>
+        </n-row>
+        <n-layout-content content-style="padding: 10px;">
+          <div class="content-box">
+            <div class="content">
+              <Router-view />
+            </div>
+          </div>
+        </n-layout-content>
+        <n-row class="footer">
+          <n-col :span="18">
+            <hr>
+              <p style="text-align-last: center;">FlashCard app designed for learining Purpose</p>
+            <hr>
+          </n-col>
+        </n-row>
       </n-col>
-      <n-col :span="6" :offset="3" class="menus">
-        <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
-      </n-col>
-    </n-row>
-    <n-layout-content content-style="padding: 10px;">
-      <div class="content-box">
-        <div class="content">
-          <Router-view />
-        </div>
-      </div>
-    </n-layout-content>
-    <n-row class="footer">
-      <n-col :span="12" :offset="6">
-        <hr>
-          <p style="text-align-last: center;">FlashCard app designed for learining Purpose</p>
-        <hr>
-      </n-col>
+      <n-col :span="6"></n-col>
     </n-row>
   </n-dialog-provider>
   </n-config-provider>
