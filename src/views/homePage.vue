@@ -4,25 +4,7 @@
     <n-col :span="18">
       <div class="home-page">
         <div id="app">
-          <n-button strong secondary type="info" @click="handleClick">
-            Add new Word
-          </n-button>
           <FlashcardContainer />
-          <n-drawer
-            v-model:show="active"
-            :close-on-esc="false"
-            :mask-closable="false"
-            @update:show="onUpdateDrawer"
-            width="500px"
-            placement="left"
-          >
-            <n-drawer-content title="Upload Data" closable :native-scrollbar="false">
-              <upload-form
-                @data:create="onDataCreate"
-                :loading="loading"
-              ></upload-form>
-            </n-drawer-content>
-          </n-drawer>
         </div>
       </div>
     </n-col>
@@ -55,15 +37,10 @@ export default {
   },
   data() {
     return {
-      themeOverrides,
-      active : false
+      themeOverrides
     };
   },
   methods: {
-    handleClick () {
-      console.log("Button Clicked");
-      this.active = true
-    }
   },
   mounted() {
   }

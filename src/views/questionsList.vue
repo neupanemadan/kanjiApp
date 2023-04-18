@@ -26,7 +26,7 @@
         >
           <n-drawer-content title="Upload Data" closable :native-scrollbar="false">
             <upload-form
-              @data:create="onDataCreate"
+              @question:create="onQuestionCreate"
               :loading="loading"
             ></upload-form>
           </n-drawer-content>
@@ -43,7 +43,28 @@ import "vfonts/FiraCode.css";
 import { AddCircleOutline } from "@vicons/ionicons5";
 import { useMessage, NAlert } from "naive-ui";
 import { h, ref } from "vue";
-import { getDatabase, ref as dbRef, get, onValue } from 'firebase/database';
+import { getDatabase, ref as dbRef, get, onValue, set, push } from 'firebase/database';
+
+const renderMessage = props => {
+  const { type } = props;
+  return h(
+    NAlert,
+    {
+      closable: props.closable,
+      onClose: props.onClose,
+      type: type === "loading" ? "default" : type,
+      title: props.title,
+      style: {
+        boxShadow: "var(--n-box-shadow)",
+        maxWidth: "calc(100vw - 32px)",
+        width: "480px"
+      }
+    },
+    {
+      default: () => props.content
+    }
+  );
+};
 
 const themeOverrides = {
   common: {
@@ -74,8 +95,7 @@ export default {
     };
   },
   methods: {
-    handleClick () {
-      console.log("Button Clicked");
+    onClickCreate () {
       this.active = true
     },
     questionsList () {
@@ -89,10 +109,34 @@ export default {
         onValue(itemsRef, (snapshot) => {
             this.questions = Object.values(snapshot.val());
         });
-
         return {
             questions: ref(this.questions)
         };
+    },
+    onQuestionCreate (data) {
+        // Get a reference to the Firebase Realtime Database
+        const db = getDatabase();
+
+        // Create a reference to the "studymate" node in the database
+        const itemsRef = dbRef(db, 'studymate');
+
+
+        // Generate a new unique ID for the item
+        const newItemRef = push(itemsRef);
+
+        // Save the data to the database
+        set(newItemRef, data)
+        .then(() => {
+          this.active = false
+          this.message.success("Question added successfully. ", {
+              render: renderMessage,
+              closable: true,
+              duration: 5000
+            });
+        })
+        .catch((error) => {
+            console.error('Error saving data: ', error);
+        });
     }
   },
   mounted() {
