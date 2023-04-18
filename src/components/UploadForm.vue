@@ -31,7 +31,7 @@
 </template>
 <script>
 import { defineComponent, ref } from "vue"
-import { getDatabase, ref as dbRef, push } from 'firebase/database'
+import { getDatabase, ref as dbRef, set, push } from 'firebase/database'
 
 export default defineComponent({
   name: "UploadForm",
@@ -82,7 +82,7 @@ export default defineComponent({
         // Get a reference to the Firebase Realtime Database
         const db = getDatabase();
 
-        // Create a reference to the "items" node in the database
+        // Create a reference to the "studymate" node in the database
         const itemsRef = dbRef(db, 'studymate');
 
         // Define the data to be saved
@@ -91,8 +91,11 @@ export default defineComponent({
         description: 'This is my item'
         };
 
+        // Generate a new unique ID for the item
+        const newItemRef = push(itemsRef);
+
         // Save the data to the database
-        push(itemsRef, this.getFormData())
+        set(newItemRef, this.getFormData())
         .then(() => {
             console.log('Data saved successfully');
         })

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 const AppLayout = () =>  import('../components/AppLayout.vue')
 const Home = () =>  import( '../views/homePage.vue')
+const Questions = () =>  import( '../views/questionsList.vue')
 
 const routes = [
   {
@@ -8,20 +9,17 @@ const routes = [
       {
         component: Home,
         name: 'home',
-        path: '/home',
-        meta: {
-          requiresAuth: true,
-          redirectOnExpire: true
-        }
+        path: '/home'
       },
       {
         component: Home,
         name: 'home',
-        path: '/',
-        meta: {
-          requiresAuth: true,
-          redirectOnExpire: true
-        }
+        path: '/'
+      },
+      {
+        component: Questions,
+        name: 'questions',
+        path: '/questions'
       },
     ],
     component: AppLayout,

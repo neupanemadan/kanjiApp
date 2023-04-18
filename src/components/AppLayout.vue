@@ -3,7 +3,7 @@
     :locale="config.jaJP"
     :theme-overrides="themeOverrides"
     :date-locale="config.dateJaJP"
-  >
+  ><n-dialog-provider>
     <n-row class="navbar">
       <n-col :span="6" :offset="6">
         <h2>studyMate</h2>
@@ -26,6 +26,7 @@
         <hr>
       </n-col>
     </n-row>
+  </n-dialog-provider>
   </n-config-provider>
 </template>
 <script>
@@ -33,7 +34,7 @@ import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
 import { NIcon } from "naive-ui";
 import { defineComponent, h, ref } from "vue";
-import { HomeOutline} from "@vicons/ionicons5";
+import { HomeOutline, EaselOutline} from "@vicons/ionicons5";
 import { RouterLink } from "vue-router";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
@@ -57,6 +58,20 @@ const menus = [
       ),
     key: "home",
     icon: renderIcon(HomeOutline)
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "questions"
+          }
+        },
+        { default: () => "Questions" }
+      ),
+    key: "questions",
+    icon: renderIcon(EaselOutline)
   }
 ];
 
