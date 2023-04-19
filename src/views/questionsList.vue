@@ -184,19 +184,26 @@ export default {
         const db = getDatabase();
 
         // Create a reference to the "studymate" node in the database
-        const itemsRef = ref(db, 'studymate');
+        const itemsRef = dbRef(db, 'studymate');
+
+        console.log(itemId)
+        console.log(itemsRef)
 
         // Create a Firebase query to search for the record with the given itemId
-        const queryRef = orderByChild(itemsRef, 'itemId', equalTo(itemId));
+        const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
 
+        console.log(queryRef)
         // Attach a listener to the query to get the snapshot of the record
         onChildAdded(queryRef, (snapshot) => {
           // Get the reference to the record using the snapshot key
           const itemToEditRef = child(itemsRef, snapshot.key);
 
+          console.log(itemToEditRef)
           // Update the item in the database
           set(itemToEditRef, data)
             .then(() => {
+              this.active = false
+              this.selectedQuestion = null
               this.message.success("Question Updated successfully. ", {
                 render: renderMessage,
                 closable: true,
