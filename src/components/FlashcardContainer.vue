@@ -7,21 +7,37 @@
       />
     <div class="question-number">{{ currentQuestionNumber }}/{{ totalQuestions }}</div>
     <div class="button-container">
-      <button @click="previousCard">Previous</button>
-      <button @click="nextCard">Next</button>
+      <n-button type="success" @click="previousCard"><i class="fa-solid fa-arrow-left"></i></n-button>
+      <n-button type="success" @click="nextCard"><i class="fa-solid fa-arrow-right"></i></n-button>
+    </div>
+    <div class="level-container">
+      <n-button :style="{ backgroundColor: hardButtonColor }" v-on:click="setButtonColor('hardButtonColor')">
+       Hard
+      </n-button>    
+      <n-button :style="{ backgroundColor: moderateButtonColor }" v-on:click="setButtonColor('moderateButtonColor')">
+        Moderate
+      </n-button>    
+      <n-button :style="{ backgroundColor: easyButtonColor }" v-on:click="setButtonColor('easyButtonColor')">
+        Easy
+      </n-button>
     </div>
   </div>
   </template>
   
 <script>
 import Flashcard from "../components/FlashCard.vue";
+import { NButton } from "naive-ui";
   
 export default {
   components: {
     Flashcard,
+    NButton
   },
   data() {
     return {
+      hardButtonColor: "",
+      moderateButtonColor: "",
+      easyButtonColor: "",
       currentCardIndex: 0,
       flashcards: [
         {
@@ -86,6 +102,12 @@ export default {
         (this.currentCardIndex - 1 + this.questions.length) %
         this.questions.length;
     },
+    setButtonColor(buttonColor) {
+      this.hardButtonColor = "#B6F976";
+      this.moderateButtonColor = "";
+      this.easyButtonColor = "";
+      this[buttonColor] = "";
+    }
   },
   computed: {
     currentQuestionNumber() {
@@ -119,8 +141,23 @@ export default {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #4caf50;
-    color: white;
+    /* background-color: #4caf50; */
+    /* color: white; */
+    cursor: pointer;
+  }
+  .level-container {
+    max-width:20vw;
+    position: relative;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .level-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
   }
   </style>
