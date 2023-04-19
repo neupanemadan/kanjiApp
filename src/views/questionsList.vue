@@ -16,6 +16,7 @@
         <questionTable
             :questions="questions"
             @question:delete="onQuestionDelete"
+            @question:update="onUpdateRequest"
         />
         <n-drawer
           v-model:show="active"
@@ -28,6 +29,8 @@
           <n-drawer-content title="Upload Data" closable :native-scrollbar="false">
             <upload-form
               @question:create="onQuestionCreate"
+              @question:update="onQuestionUpdate"
+              :selected-question="selectedQuestion"
               :loading="loading"
             ></upload-form>
           </n-drawer-content>
@@ -44,7 +47,7 @@ import "vfonts/FiraCode.css";
 import { AddCircleOutline } from "@vicons/ionicons5";
 import { useMessage, NAlert } from "naive-ui";
 import { h, ref } from "vue";
-import { getDatabase, ref as dbRef, child, onValue, set, push, remove } from 'firebase/database';
+import { getDatabase, ref as dbRef, child, onValue, set, push, remove, orderByChild, equalTo, query, onChildAdded } from 'firebase/database';
 
 const renderMessage = props => {
   const { type } = props;
@@ -92,6 +95,7 @@ export default {
       questions : [],
       themeOverrides,
       active : false,
+      selectedQuestion : null,
       message
     };
   },
@@ -146,25 +150,66 @@ export default {
       // Create a reference to the "studymate" node in the database
       const itemsRef = dbRef(db, 'studymate');
 
-      // Create a reference to the record using the itemId
-      const itemToDeleteRef = child(itemsRef, itemId);
+      // Create a Firebase query to search for the record with the given itemId
+      const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
 
       console.log('itemRef', itemId)
-      console.log('itemRef', itemToDeleteRef)
+      console.log('itemRef', queryRef)
 
-      // Remove the item from the database
-      remove(itemToDeleteRef)
-        .then(() => {
-          this.message.success("Question deleted successfully. ", {
-              render: renderMessage,
-              closable: true,
-              duration: 5000
+      // Attach a listener to the query to get the snapshot of the record
+      onChildAdded(queryRef, (snapshot) => {
+        // Get the reference to the record using the snapshot key
+        const itemToDeleteRef = child(itemsRef, snapshot.key);
+
+        // Remove the item from the database
+        remove(itemToDeleteRef)
+          .then(() => {
+              this.message.success("Question deleted successfully. ", {
+                render: renderMessage,
+                closable: true,
+                duration: 5000
+              });
+            })
+          .catch((error) => {
+            console.error('Error deleting record: ', error);
+          });
+      });
+    },
+    onUpdateRequest (data) {
+      this.active = true
+      this.selectedQuestion = data
+    },
+    onQuestionUpdate(itemId, data) {
+        // Get a reference to the Firebase Realtime Database
+        const db = getDatabase();
+
+        // Create a reference to the "studymate" node in the database
+        const itemsRef = ref(db, 'studymate');
+
+        // Create a Firebase query to search for the record with the given itemId
+        const queryRef = orderByChild(itemsRef, 'itemId', equalTo(itemId));
+
+        // Attach a listener to the query to get the snapshot of the record
+        onChildAdded(queryRef, (snapshot) => {
+          // Get the reference to the record using the snapshot key
+          const itemToEditRef = child(itemsRef, snapshot.key);
+
+          // Update the item in the database
+          set(itemToEditRef, data)
+            .then(() => {
+              this.message.success("Question Updated successfully. ", {
+                render: renderMessage,
+                closable: true,
+                duration: 5000
+              });
+            })
+            .catch((error) => {
+              console.error('Error updating record: ', error);
             });
-        })
-        .catch((error) => {
-          console.error('Error deleting item: ', error);
         });
-    }
+
+      }
+
   },
   mounted() {
     this.questionsList()

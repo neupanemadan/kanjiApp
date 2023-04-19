@@ -38,14 +38,17 @@ export default defineComponent({
     loading: {
       type: Boolean,
       default: false
-    }
+    },
+    selectedQuestion: {
+      required: false
+    },
   },
   setup(props) {
-    const defaultDeck = {
+    const defaultQuestion = {
       question: null,
       answer: null
     };
-    const deck = ref(defaultDeck);
+    const deck = ref(props.selectedQuestion|| defaultQuestion);
     const showModalRef = ref(false);
     return {
       showModal: showModalRef,
@@ -73,13 +76,18 @@ export default defineComponent({
         if (errors) {
           return;
         }
-        const eventName = "question:create";
-        this.$emit(eventName, this.getFormData());
+        if (this.deck.itemId) {
+          const eventName = "question:update";
+          this.$emit(eventName, this.deck.itemId, this.getFormData());
+        } else {
+          const eventName = "question:create";
+          this.$emit(eventName, this.getFormData());
+        }
       });
     },
     getFormData() {
       const data = {
-        itemId: this.generateItemId(), // generate a unique ID for the item
+        itemId: this.deck.itemId?this.deck.itemId:this.generateItemId(), // generate a unique ID for the item
         question: this.deck.question,
         answer: this.deck.answer
       };

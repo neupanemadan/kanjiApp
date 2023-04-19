@@ -82,16 +82,13 @@
     name: "questionTable",
   
     data() {
-      const active = ref(null)
-      const selectedQuestion = ref(null)
       const dialog = useDialog()
   
       return {
           columns: createColumns({
             updateHandler: row => {
-              active.value = true
-              selectedQuestion.value = row
-              this.updateRow(selectedQuestion)
+              const eventName =  "question:update";
+              this.$emit(eventName, row);
             },
             deleteHandler: row => {
               dialog.warning({
@@ -106,15 +103,13 @@
             })
           }
         }),
-        active,
         disabled: false,
         dialog,
         loading: false,
         height: ref(66),
         pagination: {
           pageSize: 25
-        },
-        selectedQuestion
+        }
       };
     },
     methods: {
