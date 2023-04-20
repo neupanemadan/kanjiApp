@@ -24,11 +24,11 @@
           </div>
         </div>
         <div v-else>
-            <n-alert title="Questions not available!" type="warning" class="alert-message" >
+            <n-alert title="Completed!!!" type="warning" class="alert-message" >
                 There are not any questions left on this level.
                 please try another level. <br><br>
 
-                <n-button type="warning" v-on:click="goBack()">Back</n-button>
+                <n-button type="warning" v-on:click="goBack()">Sure</n-button>
             </n-alert>
         </div>
   </template>
@@ -36,7 +36,6 @@
 <script>
 import Flashcard from "../components/FlashCard.vue";
 import { NButton, NAlert } from "naive-ui";
-import { } from "naive-ui";
   
 export default {
   components: {
@@ -137,7 +136,7 @@ export default {
       // Add a delay of 3 seconds before calling the nextCard() method
       setTimeout(() => {
         this.nextCard();
-      }, 600);
+      }, 300);
 
       this.checkIfCompleted()
     },

@@ -24,6 +24,11 @@
              {{ easy_question.length }}
             </n-card>
           </div>
+          <div class="button-container">
+            <n-button v-on:click="onReset()">
+             Reset
+            </n-button>
+          </div>
         </div>
       </div>
     </n-col>
@@ -34,8 +39,9 @@
 <script>
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
-import { getDatabase, ref as dbRef, child, onValue, set, orderByChild, equalTo, query, onChildAdded } from 'firebase/database';
+import { getDatabase, ref as dbRef, child, onValue, set, orderByChild, equalTo, query, onChildAdded, update, get } from 'firebase/database';
 import { h, ref } from "vue";
+import { NAlert, useMessage, useDialog } from "naive-ui";
 
 
 const themeOverrides = {
@@ -52,8 +58,15 @@ const themeOverrides = {
   }
 };
 export default {
+  components: {
+    NAlert
+  },
   data() {
+    const message = useMessage();
+    const dialog = useDialog();
     return {
+      message,
+      dialog,
       questions : [],
       selected_questions : [],
       themeOverrides,
@@ -112,6 +125,28 @@ export default {
         });
 
       },
+      resetLevel () {
+        // Get a reference to the Firebase Realtime Database
+        const db = getDatabase();
+
+        // Create a reference to the "studymate" node in the database
+        const itemsRef = dbRef(db, 'studymate');
+
+        // const dbRef = firebase.database().ref('studymate');
+        // Set up a listener for changes to the "items" node
+        onValue(itemsRef, (snapshot) => {
+            const items = Object.values(snapshot.val())
+            for (let itemKey in items) {
+              const item = items[itemKey]
+              console.log(item)
+              item.level = 3
+              console.log(item)
+              const itemToEditRef = child(itemsRef, itemKey);
+              console.log(itemToEditRef)
+              update(itemToEditRef, { level: item.level });
+            }
+        });
+      },
       onAllLevelClick () {
         this.level_selected = true
         this.selected_questions = ref(this.total_question)
@@ -136,6 +171,21 @@ export default {
       },
       onEmptyQuestions () {
         this.level_selected = false
+      },
+      onReset () {
+        this.dialog.warning({
+          title: "Are you sure?",
+          content: "All the data will be restored to default level.",
+          positiveText: "Sure",
+          negativeText: "Not Sure",
+          onEsc: () => {
+            this.message.warning("close by esc");
+          },
+          onPositiveClick: () => {
+            this.resetLevel()
+          }
+        });
+
       }
   },
   mounted() {
@@ -241,4 +291,12 @@ body {
   background: lightgreen;
   color: black;
 }
+.button-container {
+    max-width:26vw;
+    position: relative;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
 </style>
