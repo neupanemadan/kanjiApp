@@ -50,8 +50,7 @@ export default {
 
 <style scoped>
 .flashcard {
-  width: 20vw;
-  height: 300px;
+  height: 58vh;
   perspective: 1000px;
   border-radius: 2%;
   margin-bottom: 7%;
@@ -64,6 +63,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+  font-size: 2.5rem;
   backface-visibility: hidden;
 }
 
@@ -73,6 +73,7 @@ export default {
   justify-content: center;
   border-radius: 2%;
   align-items: center;
+  font-size: 3rem;
   transition: transform 0.6s;
   transform-style: preserve-3d;
 }
@@ -108,9 +109,10 @@ export default {
 
 .flip-text {
   position: relative;
-  top: 240px;
+  top: 75%;
   opacity: 0.5;
-  left: 9vw;
+  font-size: 1.5rem;
+  left: 43%;
 }
 
 .flipped .front {

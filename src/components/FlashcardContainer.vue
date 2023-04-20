@@ -194,7 +194,6 @@ export default {
     margin-bottom: 10px;
   }
   .button-container {
-    max-width:20vw;
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
@@ -208,7 +207,6 @@ export default {
     cursor: pointer;
   }
   .level-container {
-    max-width:20vw;
     position: relative;
     margin-top: 1rem;
     display: flex;
@@ -227,7 +225,6 @@ export default {
 }
 .alert-message {
   margin: 2rem;
-  max-width: 30vw;
   margin-left: -3rem;
 }
   </style>

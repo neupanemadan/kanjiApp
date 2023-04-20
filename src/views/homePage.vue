@@ -1,62 +1,43 @@
 <template>
-  <n-row gutter="12">
-    <n-col :span="4"></n-col>
-    <n-col :span="18">
-      <div class="home-page">
-        <div id="app">
-          <flashcard-container
-            :questions="selected_questions"
-            @level:update="onLevelUpdate"
-            @empty:questions="onEmptyQuestions"
-            v-if="level_selected"
-          />
-          <div class="levels" v-else>
-            <n-card title="All Level" class="level-card all-level" @click="onAllLevelClick">
-              {{  total_question.length  }}
-            </n-card>
-            <n-card title="Difficult" class="level-card difficult-level" @click="onDifficultLevelClick">
-              {{  difficult_question.length }}
-            </n-card>
-            <n-card title="Moderate" class="level-card moderate-level" @click="onModerateLevelClick">
-              {{ moderate_question.length }}
-            </n-card>
-            <n-card title="Easy" class="level-card easy-level" @click="onEasyLevelClick">
-             {{ easy_question.length }}
-            </n-card>
-          </div>
-          <div class="button-container" v-if="!level_selected">
-            <n-button v-on:click="onReset()">
-             Reset
-            </n-button>
-          </div>
+    <div class="home-page">
+      <div id="app">
+        <flashcard-container
+          :questions="selected_questions"
+          @level:update="onLevelUpdate"
+          @empty:questions="onEmptyQuestions"
+          v-if="level_selected"
+        />
+        <div class="levels" v-else>
+          <n-card title="All Level" class="level-card all-level" @click="onAllLevelClick">
+            {{  total_question.length  }}
+          </n-card>
+          <n-card title="Difficult" class="level-card difficult-level" @click="onDifficultLevelClick">
+            {{  difficult_question.length }}
+          </n-card>
+          <n-card title="Moderate" class="level-card moderate-level" @click="onModerateLevelClick">
+            {{ moderate_question.length }}
+          </n-card>
+          <n-card title="Easy" class="level-card easy-level" @click="onEasyLevelClick">
+            {{ easy_question.length }}
+          </n-card>
+        </div>
+        <div class="button-container" v-if="!level_selected">
+          <n-button v-on:click="onReset()">
+            Reset
+          </n-button>
         </div>
       </div>
-    </n-col>
-    <n-col :span="3"></n-col>
-  </n-row>
+    </div>
 </template>
 
 <script>
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
-import { getDatabase, ref as dbRef, child, onValue, set, orderByChild, equalTo, query, onChildAdded, update, get } from 'firebase/database';
-import { h, ref } from "vue";
+import { getDatabase, ref as dbRef, child, onValue, set, orderByChild, equalTo, query, onChildAdded, update } from 'firebase/database';
+import { ref } from "vue";
 import { NAlert, useMessage, useDialog } from "naive-ui";
 
 
-const themeOverrides = {
-  common: {
-    fontSize: "15px",
-    fontSizeMedium: "15px",
-    fontSizeLarge: "16px"
-  },
-  Card: {
-    titleFontSizeMedium: "20px"
-  },
-  Form: {
-    labelFontSizeTopLarge: "15px"
-  }
-};
 export default {
   components: {
     NAlert
@@ -69,7 +50,6 @@ export default {
       dialog,
       questions : [],
       selected_questions : [],
-      themeOverrides,
       total_question : [],
       difficult_question : [],
       moderate_question : [],
@@ -196,75 +176,8 @@ export default {
 };
 </script>
 <style>
-#app {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  min-width: 320px;
-  --header-height: 64px;
-  --content-width: 100vw;
-  --content-max-width: calc(100vw - 32px);
-}
-
-body {
-  overflow: auto;
-  -webkit-font-smoothing: antialiased;
-}
-
-.n-layout-header {
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  padding: 1px;
-}
-
-.nav {
-  height: calc(var(--header-height) - 1px);
-  display: flex;
-  justify-content: center;
-}
-
-.nav-box {
-  display: flex;
-  justify-content: flex-start;
-  margin: auto;
-  width: var(--content-width);
-  max-width: var(--content-max-width);
-}
-
-.nav-menu {
-  padding-left: 100px;
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.ui-logo {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-}
-
-.ui-logo  {
-  margin-right: 12px;
-  margin-left: 12px;
-  height: 70px;
-  width: 300px;
-}
-
-.content-box {
-  margin: auto;
-  width: var(--content-width);
-  max-width: var(--content-max-width);
-}
-
-.content {
-  margin-top: 0px;
-}
-.n-alert:not(:last-child) {
-  margin-bottom: 12px;
-}
 .levels {
-  max-width: 30vw;
-  margin-left: -3rem;
+  max-width: 100vw;
 }
 .level-card {
   margin-top: 1rem;
@@ -293,7 +206,7 @@ body {
   color: black;
 }
 .button-container {
-    max-width:26vw;
+    max-width:100vw;
     position: relative;
     margin-top: 1rem;
     display: flex;

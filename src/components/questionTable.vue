@@ -1,7 +1,4 @@
 <template>
-  <n-row gutter="12">
-    <n-col :span="18">
-      <div>
       <n-card style="margin-top: 10px" embedded :bordered="false">
         <n-data-table
           ref="questionTable"
@@ -15,9 +12,6 @@
           flex-height
         />
       </n-card>
-    </div>
-    </n-col>
-  </n-row>
   </template>
   <script>
   import { h, ref } from "vue";
