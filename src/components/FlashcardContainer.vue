@@ -1,38 +1,47 @@
 <template>
-  <div>
-    <Flashcard
-      v-if="currentCardIndex >= 0 && currentCardIndex < questions.length"
-      :question="questions[currentCardIndex].question"
-      :answer="questions[currentCardIndex].answer"
-      />
-    <div class="question-number">{{ currentQuestionNumber }}/{{ totalQuestions }}</div>
-    <!-- <div class="button-container">
-      <n-button type="success" @click="previousCard"><i class="fa-solid fa-arrow-left"></i></n-button>
-      <n-button type="success" @click="nextCard"><i class="fa-solid fa-arrow-right"></i></n-button>
-    </div> -->
-    {{ difficultyLevel }}
-    <div class="level-container">
-      <n-button :style="{ backgroundColor: hardButtonColor }" v-on:click="setLevel('hardButtonColor')">
-       Hard
-      </n-button>    
-      <n-button :style="{ backgroundColor: moderateButtonColor }" v-on:click="setLevel('moderateButtonColor')">
-        Moderate
-      </n-button>    
-      <n-button :style="{ backgroundColor: easyButtonColor }" v-on:click="setLevel('easyButtonColor')">
-        Easy
-      </n-button>
-    </div>
-  </div>
+        <div v-if="totalQuestions > 0">
+          <Flashcard
+            v-if="currentCardIndex >= 0 && currentCardIndex < questions.length"
+            :question="questions[currentCardIndex].question"
+            :answer="questions[currentCardIndex].answer"
+            />
+          <div class="question-number">{{ currentQuestionNumber }}/{{ totalQuestions }}</div>
+          <!-- <div class="button-container">
+            <n-button type="success" @click="previousCard"><i class="fa-solid fa-arrow-left"></i></n-button>
+            <n-button type="success" @click="nextCard"><i class="fa-solid fa-arrow-right"></i></n-button>
+          </div> -->
+          {{ difficultyLevel }}    
+          <div class="level-container">
+            <n-button :style="{ backgroundColor: hardButtonColor }" v-on:click="setLevel('hardButtonColor')">
+             Hard
+            </n-button>    
+            <n-button :style="{ backgroundColor: moderateButtonColor }" v-on:click="setLevel('moderateButtonColor')">
+              Moderate
+            </n-button>    
+            <n-button :style="{ backgroundColor: easyButtonColor }" v-on:click="setLevel('easyButtonColor')">
+              Easy
+            </n-button>
+          </div>
+        </div>
+        <div v-else>
+            <n-alert title="Questions not available!" type="warning" class="alert-message" >
+                There are not any questions left on this level.
+                please try another level. <br><br>
+
+                <n-button type="warning" v-on:click="goBack()">Back</n-button>
+            </n-alert>
+        </div>
   </template>
   
 <script>
 import Flashcard from "../components/FlashCard.vue";
-import { NButton } from "naive-ui";
+import { NButton, NAlert } from "naive-ui";
   
 export default {
   components: {
     Flashcard,
-    NButton
+    NButton,
+    NAlert
   },
   data() {
     return {
@@ -123,7 +132,14 @@ export default {
       const eventName = "level:update";
       this.$emit(eventName, item_id, current_data);
 
-      this.nextCard()
+      // Add a delay of 3 seconds before calling the nextCard() method
+      setTimeout(() => {
+        this.nextCard();
+      }, 600);
+    },
+    goBack () {
+      const eventName = "empty:questions";
+      this.$emit(eventName);
     },
     getSelectedLevel (selectedLevel) {
       console.log(selectedLevel)
@@ -198,5 +214,13 @@ export default {
     border-radius: 5px;
     cursor: pointer;
   }
+  .n-alert:not(:last-child) {
+  margin-bottom: 12px;
+}
+.alert-message {
+  margin: 2rem;
+  max-width: 30vw;
+  margin-left: -3rem;
+}
   </style>
   
