@@ -6,6 +6,7 @@
         <div id="app">
           <flashcard-container
               :questions="questions"
+              @level:update="onLevelUpdate"
             ></flashcard-container>
         </div>
       </div>
@@ -17,7 +18,7 @@
 <script>
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
-import { getDatabase, ref as dbRef, onValue} from 'firebase/database';
+import { getDatabase, ref as dbRef, child, onValue, set, orderByChild, equalTo, query, onChildAdded } from 'firebase/database';
 import { h, ref } from "vue";
 
 
@@ -57,6 +58,35 @@ export default {
             questions: ref(this.questions)
         };
     },
+    onLevelUpdate(itemId, data) {
+        // Get a reference to the Firebase Realtime Database
+        const db = getDatabase();
+
+        // Create a reference to the "studymate" node in the database
+        const itemsRef = dbRef(db, 'studymate');
+
+        console.log(itemId)
+        console.log(data)
+
+        // Create a Firebase query to search for the record with the given itemId
+        const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
+
+        // Attach a listener to the query to get the snapshot of the record
+        onChildAdded(queryRef, (snapshot) => {
+          // Get the reference to the record using the snapshot key
+          const itemToEditRef = child(itemsRef, snapshot.key);
+
+          // Update the item in the database
+          set(itemToEditRef, data)
+            .then(() => {
+              console.log('level updated')
+            })
+            .catch((error) => {
+              console.error('Error updating record: ', error);
+            });
+        });
+
+      }
   },
   mounted() {
     this.getGuestionsList()

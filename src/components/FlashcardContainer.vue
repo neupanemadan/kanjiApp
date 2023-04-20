@@ -6,18 +6,19 @@
       :answer="questions[currentCardIndex].answer"
       />
     <div class="question-number">{{ currentQuestionNumber }}/{{ totalQuestions }}</div>
-    <div class="button-container">
+    <!-- <div class="button-container">
       <n-button type="success" @click="previousCard"><i class="fa-solid fa-arrow-left"></i></n-button>
       <n-button type="success" @click="nextCard"><i class="fa-solid fa-arrow-right"></i></n-button>
-    </div>
+    </div> -->
+    {{ difficultyLevel }}
     <div class="level-container">
-      <n-button :style="{ backgroundColor: hardButtonColor }" v-on:click="setButtonColor('hardButtonColor')">
+      <n-button :style="{ backgroundColor: hardButtonColor }" v-on:click="setLevel('hardButtonColor')">
        Hard
       </n-button>    
-      <n-button :style="{ backgroundColor: moderateButtonColor }" v-on:click="setButtonColor('moderateButtonColor')">
+      <n-button :style="{ backgroundColor: moderateButtonColor }" v-on:click="setLevel('moderateButtonColor')">
         Moderate
       </n-button>    
-      <n-button :style="{ backgroundColor: easyButtonColor }" v-on:click="setButtonColor('easyButtonColor')">
+      <n-button :style="{ backgroundColor: easyButtonColor }" v-on:click="setLevel('easyButtonColor')">
         Easy
       </n-button>
     </div>
@@ -90,6 +91,9 @@ export default {
   },
   methods: {
     nextCard() {
+      this.hardButtonColor = "";
+      this.moderateButtonColor = "";
+      this.easyButtonColor = "";
       this.showAnswer = false;
       this.flip = false;
       this.currentCardIndex =
@@ -102,11 +106,34 @@ export default {
         (this.currentCardIndex - 1 + this.questions.length) %
         this.questions.length;
     },
-    setButtonColor(buttonColor) {
+    setLevel(selectedLevel) {
       this.hardButtonColor = "";
       this.moderateButtonColor = "";
       this.easyButtonColor = "";
-      this[buttonColor] = "";
+      this[selectedLevel] = "#a2e9ee";
+
+      const item_id = this.questions[this.currentCardIndex].itemId
+      const current_data = {
+        itemId : item_id,
+        question : this.questions[this.currentCardIndex].question,
+        answer : this.questions[this.currentCardIndex].answer,
+        level : this.getSelectedLevel(selectedLevel)
+      }
+
+      const eventName = "level:update";
+      this.$emit(eventName, item_id, current_data);
+
+      this.nextCard()
+    },
+    getSelectedLevel (selectedLevel) {
+      console.log(selectedLevel)
+      if (selectedLevel === 'easyButtonColor') {
+        return 1
+      } else if (selectedLevel === 'moderateButtonColor') {
+        return 2
+      } else {
+        return 3
+      }
     }
   },
   computed: {
@@ -116,6 +143,17 @@ export default {
     totalQuestions() {
       return this.questions.length;
     },
+    difficultyLevel () {
+      if (this.questions.length > 0) {
+        if (this.questions[this.currentCardIndex].level === 1) {
+          this.easyButtonColor = "#a2e9ee"
+        } else if (this.questions[this.currentCardIndex].level === 2) {
+          this.moderateButtonColor = "#a2e9ee"
+        } else {
+          this.hardButtonColor = "#a2e9ee"
+        }
+      }
+    }
   },
   props: {
       questions: {
