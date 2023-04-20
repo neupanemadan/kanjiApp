@@ -36,6 +36,10 @@
         key: "answer"
       },
       {
+        title: "Level",
+        key: "level"
+      },
+      {
         title: "Actions",
         key: "actions",
         width: 80,

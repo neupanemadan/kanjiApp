@@ -103,7 +103,7 @@ export default {
         this.questions.length;
     },
     setButtonColor(buttonColor) {
-      this.hardButtonColor = "#B6F976";
+      this.hardButtonColor = "";
       this.moderateButtonColor = "";
       this.easyButtonColor = "";
       this[buttonColor] = "";

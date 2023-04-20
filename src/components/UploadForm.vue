@@ -7,6 +7,15 @@
             <n-form-item-gi span="16" label="Question" path="question">
               <n-input v-model:value="deck.question" placeholder="Question" size="large" />
             </n-form-item-gi>
+            <n-form-item-gi span="16" label="level" path="level">
+              <n-select
+                filterable
+                placeholder="Select level"
+                :options="levels"
+                v-model:value="deck.level"
+                size="large"
+              />
+            </n-form-item-gi>
             <n-form-item-gi span="16" label="Answer" path="answer">
                 <n-input
                     v-model:value="deck.answer"
@@ -46,13 +55,20 @@ export default defineComponent({
   setup(props) {
     const defaultQuestion = {
       question: null,
-      answer: null
+      answer: null,
+      level: 3
     };
     const deck = ref(props.selectedQuestion|| defaultQuestion);
     const showModalRef = ref(false);
+    const levels = [
+      {label:'Easy', value:1},
+      {label:'Moderate', value:2},
+      {label:'Difficult', value:3}
+    ]
     return {
       showModal: showModalRef,
       deck,
+      levels,
       formref: ref(null),
       rules: {
         question: {
@@ -67,7 +83,7 @@ export default defineComponent({
           trigger: ["blur", "change"],
           message: "Answer is required."
         }
-      }
+      },
     };
   },
   methods: {
@@ -89,7 +105,8 @@ export default defineComponent({
       const data = {
         itemId: this.deck.itemId?this.deck.itemId:this.generateItemId(), // generate a unique ID for the item
         question: this.deck.question,
-        answer: this.deck.answer
+        answer: this.deck.answer,
+        level: this.deck.level
       };
       return data;
     },
@@ -98,5 +115,5 @@ export default defineComponent({
       return Date.now().toString();
     }
       }
-});
+})
 </script>
