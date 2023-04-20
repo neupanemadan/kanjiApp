@@ -56,11 +56,12 @@ export default defineComponent({
     const defaultQuestion = {
       question: null,
       answer: null,
-      level: 3
+      level: 0
     };
     const deck = ref(props.selectedQuestion|| defaultQuestion);
     const showModalRef = ref(false);
     const levels = [
+      {label:'Not assigned', value:0},
       {label:'Easy', value:1},
       {label:'Moderate', value:2},
       {label:'Difficult', value:3}

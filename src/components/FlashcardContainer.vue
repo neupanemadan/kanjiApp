@@ -173,7 +173,7 @@ export default {
           this.easyButtonColor = "#a2e9ee"
         } else if (this.questions[this.currentCardIndex].level === 2) {
           this.moderateButtonColor = "#a2e9ee"
-        } else {
+        } else if (this.questions[this.currentCardIndex].level === 3) {
           this.hardButtonColor = "#a2e9ee"
         }
       }

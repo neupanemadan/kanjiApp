@@ -24,7 +24,7 @@
              {{ easy_question.length }}
             </n-card>
           </div>
-          <div class="button-container">
+          <div class="button-container" v-if="!level_selected">
             <n-button v-on:click="onReset()">
              Reset
             </n-button>
@@ -135,15 +135,16 @@ export default {
         // const dbRef = firebase.database().ref('studymate');
         // Set up a listener for changes to the "items" node
         onValue(itemsRef, (snapshot) => {
-            const items = Object.values(snapshot.val())
+            const items = snapshot.val();
+            let count = 0
             for (let itemKey in items) {
-              const item = items[itemKey]
-              console.log(item)
-              item.level = 3
-              console.log(item)
               const itemToEditRef = child(itemsRef, itemKey);
-              console.log(itemToEditRef)
-              update(itemToEditRef, { level: item.level });
+              console.log(count)
+              count = count + 1
+              if (count === 320) {
+                break
+              }
+              update(itemToEditRef, { level: 0});
             }
         });
       },
