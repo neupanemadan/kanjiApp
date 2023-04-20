@@ -1,5 +1,5 @@
 <template>
-        <div v-if="totalQuestions > 0">
+        <div v-if="totalQuestions > 0 && not_completed">
           <Flashcard
             v-if="currentCardIndex >= 0 && currentCardIndex < questions.length"
             :question="questions[currentCardIndex].question"
@@ -36,6 +36,7 @@
 <script>
 import Flashcard from "../components/FlashCard.vue";
 import { NButton, NAlert } from "naive-ui";
+import { } from "naive-ui";
   
 export default {
   components: {
@@ -48,6 +49,7 @@ export default {
       hardButtonColor: "",
       moderateButtonColor: "",
       easyButtonColor: "",
+      not_completed: true,
       currentCardIndex: 0,
       flashcards: [
         {
@@ -136,10 +138,17 @@ export default {
       setTimeout(() => {
         this.nextCard();
       }, 600);
+
+      this.checkIfCompleted()
     },
     goBack () {
       const eventName = "empty:questions";
       this.$emit(eventName);
+    },
+    checkIfCompleted () {
+      if ((this.currentCardIndex + 1) === this.questions.length) {
+        this.not_completed = false
+      }
     },
     getSelectedLevel (selectedLevel) {
       console.log(selectedLevel)
