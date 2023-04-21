@@ -91,8 +91,9 @@ export default {
         await createUserWithEmailAndPassword(auth, this.email, this.password)
         // const user = userCredential.user
         // console.log(user)
-        this.requestLogin()
-        this.message.success("User created successfully. Please login with your detail. ", {
+        // this.requestLogin()
+        this.router.push({ name: "home" });
+        this.message.success("User created and logged in with provided details successfully. ", {
           render: renderMessage,
           closable: true,
           duration: 5000
