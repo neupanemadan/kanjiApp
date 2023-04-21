@@ -1,6 +1,6 @@
 <template>
     <div id="home">
-        <div class="login-form">
+    <div class="login-form">
     <h1>Login</h1>
     <form @submit.prevent="login">
       <div class="form-group">
@@ -15,9 +15,15 @@
         <button class="submit-button" type="submit">Login</button>
       </div>
     </form>
-    <div class="google-login">
-      <p>Or login/signup with Google:</p>
-      <button class="button-btn" @click="signInWithGoogle">Sign in with Google</button>
+    <div class="another-methods">
+      <div class="create-account">
+        <p>Not Regestired?</p>
+        <button class="create-btn" @click="createNewAccount">Create Account</button>
+      </div>
+      <!-- <div class="google-login">
+        <p>Or login/signup with Google:</p>
+        <button class="button-btn" @click="signInWithGoogle">Sign in with Google</button>
+      </div> -->
     </div>
   </div>
     </div>
@@ -27,23 +33,60 @@
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { h } from "vue";
+import { useRouter } from "vue-router";
+import { useMessage, NAlert } from "naive-ui";
+
+
+const renderMessage = props => {
+  const { type } = props;
+  return h(
+    NAlert,
+    {
+      closable: props.closable,
+      onClose: props.onClose,
+      type: type === "loading" ? "default" : type,
+      title: props.title,
+      style: {
+        boxShadow: "var(--n-box-shadow)",
+        maxWidth: "calc(100vw - 32px)",
+        width: "480px"
+      }
+    },
+    {
+      default: () => props.content
+    }
+  );
+};
 
 export default {
-data() {
+  data() {
+    const message = useMessage()
+    const router = useRouter()
     return {
+      message,
+      router,
       email: '',
       password: '',
     };
   },
-methods: {
+  methods: {
     async login() {
       const auth = getAuth();
       try {
         await signInWithEmailAndPassword(auth, this.email, this.password);
-        // Redirect to user dashboard or homepage
+        this.router.push({ name: "home" });
+        this.message.success("Logged in successfully. ", {
+          render: renderMessage,
+          closable: true,
+          duration: 5000
+        });
       } catch (error) {
-        console.error(error);
-        // Show error message to user
+        this.message.error("Logging error! Check your logins detail.", {
+          render: renderMessage,
+          closable: true,
+          duration: 5000
+        });
       }
     },
     async signInWithGoogle() {
@@ -57,9 +100,13 @@ methods: {
         // Show error message to user
       }
     },
-},
-mounted() {
-}
+    createNewAccount () {
+      const eventName =  "create:account";
+      this.$emit(eventName);
+    }
+  },
+  mounted() {
+  }
 };
 </script>
 <style>
@@ -102,6 +149,27 @@ input[type="password"] {
   border: 1px solid #ccc;
   font-size: 16px;
 }
+
+.create-btn {
+  margin: 0 auto;
+  padding: 5px 10px;
+  background-color: #3b89a1;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.create-account {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.create-account p {
+  font-size: 14px;
+}
+
 
 .submit-button,
 .button-btn {

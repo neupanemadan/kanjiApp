@@ -115,6 +115,6 @@ export default defineComponent({
       // generate a unique ID using the current timestamp
       return Date.now().toString();
     }
-      }
+  }
 })
 </script>

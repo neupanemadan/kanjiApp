@@ -59,115 +59,115 @@ export default {
   },
   methods: {
     getQuestionsList () {
-        // Get a reference to the Firebase Realtime Database
-        const db = getDatabase();
+      // Get a reference to the Firebase Realtime Database
+      const db = getDatabase();
 
-        // Create a reference to the "studymate" node in the database
-        const itemsRef = dbRef(db, 'studymate');
+      // Create a reference to the "studymate" node in the database
+      const itemsRef = dbRef(db, 'studymate');
 
-        // Set up a listener for changes to the "items" node
-        onValue(itemsRef, (snapshot) => {
-            const data = Object.values(snapshot.val())
-            this.questions = data
-            this.total_question = data
-            this.difficult_question = data.filter(({ level }) => level === 3)
-            this.moderate_question = data.filter(({ level }) => level === 2)
-            this.easy_question = data.filter(({ level }) => level === 1)
-        });
+      // Set up a listener for changes to the "items" node
+      onValue(itemsRef, (snapshot) => {
+        const data = Object.values(snapshot.val())
+        this.questions = data
+        this.total_question = data
+        this.difficult_question = data.filter(({ level }) => level === 3)
+        this.moderate_question = data.filter(({ level }) => level === 2)
+        this.easy_question = data.filter(({ level }) => level === 1)
+      });
 
-        return {
-            questions: ref(this.questions)
-        };
+      return {
+        questions: ref(this.questions)
+      };
     },
     onLevelUpdate(itemId, data) {
-        // Get a reference to the Firebase Realtime Database
-        const db = getDatabase();
+      // Get a reference to the Firebase Realtime Database
+      const db = getDatabase();
 
-        // Create a reference to the "studymate" node in the database
-        const itemsRef = dbRef(db, 'studymate');
+      // Create a reference to the "studymate" node in the database
+      const itemsRef = dbRef(db, 'studymate');
 
-        // Create a Firebase query to search for the record with the given itemId
-        const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
+      // Create a Firebase query to search for the record with the given itemId
+      const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
 
-        // Attach a listener to the query to get the snapshot of the record
-        onChildAdded(queryRef, (snapshot) => {
-          // Get the reference to the record using the snapshot key
-          const itemToEditRef = child(itemsRef, snapshot.key);
+      // Attach a listener to the query to get the snapshot of the record
+      onChildAdded(queryRef, (snapshot) => {
+        // Get the reference to the record using the snapshot key
+        const itemToEditRef = child(itemsRef, snapshot.key);
 
-          // Update the item in the database
-          set(itemToEditRef, data)
-            .then(() => {
-              console.log('level updated')
-            })
-            .catch((error) => {
-              console.error('Error updating record: ', error);
-            });
-        });
+        // Update the item in the database
+        set(itemToEditRef, data)
+          .then(() => {
+            console.log('level updated')
+          })
+          .catch((error) => {
+            console.error('Error updating record: ', error);
+          });
+      });
 
-      },
-      resetLevel () {
-        // Get a reference to the Firebase Realtime Database
-        const db = getDatabase();
+    },
+    resetLevel () {
+      // Get a reference to the Firebase Realtime Database
+      const db = getDatabase();
 
-        // Create a reference to the "studymate" node in the database
-        const itemsRef = dbRef(db, 'studymate');
+      // Create a reference to the "studymate" node in the database
+      const itemsRef = dbRef(db, 'studymate');
 
-        // const dbRef = firebase.database().ref('studymate');
-        // Set up a listener for changes to the "items" node
-        onValue(itemsRef, (snapshot) => {
-            const items = snapshot.val();
-            let count = 0
-            for (let itemKey in items) {
-              const itemToEditRef = child(itemsRef, itemKey);
-              console.log(count)
-              count = count + 1
-              if (count === 320) {
-                break
-              }
-              update(itemToEditRef, { level: 0});
-            }
-        });
-      },
-      onAllLevelClick () {
-        this.level_selected = true
-        this.selected_questions = ref(this.total_question)
-      },
-      onDifficultLevelClick () {
-        this.level_selected = true
-        this.selected_questions = ref(this.difficult_question)
-      },
-      onModerateLevelClick () {
-        this.level_selected = true
-        this.selected_questions = ref(this.moderate_question)
-      },
-      onEasyLevelClick () {
-        this.level_selected = true
-        this.selected_questions = ref(this.easy_question)
-      },
-      categorizedQuestion () {
-        this.total_question = this.questions
-        this.difficult_question = this.questions.filter(({ level }) => level === 3)
-        this.moderate_question = this.questions.filter(({ level }) => level === 2)
-        this.easy_question = this.questions.filter(({ level }) => level === 1)
-      },
-      onEmptyQuestions () {
-        this.level_selected = false
-      },
-      onReset () {
-        this.dialog.warning({
-          title: "Are you sure?",
-          content: "All the data will be restored to default level.",
-          positiveText: "Sure",
-          negativeText: "Not Sure",
-          onEsc: () => {
-            this.message.warning("close by esc");
-          },
-          onPositiveClick: () => {
-            this.resetLevel()
+      // const dbRef = firebase.database().ref('studymate');
+      // Set up a listener for changes to the "items" node
+      onValue(itemsRef, (snapshot) => {
+        const items = snapshot.val();
+        let count = 0
+        for (let itemKey in items) {
+          const itemToEditRef = child(itemsRef, itemKey);
+          console.log(count)
+          count = count + 1
+          if (count === 320) {
+            break
           }
-        });
+          update(itemToEditRef, { level: 0});
+        }
+      });
+    },
+    onAllLevelClick () {
+      this.level_selected = true
+      this.selected_questions = ref(this.total_question)
+    },
+    onDifficultLevelClick () {
+      this.level_selected = true
+      this.selected_questions = ref(this.difficult_question)
+    },
+    onModerateLevelClick () {
+      this.level_selected = true
+      this.selected_questions = ref(this.moderate_question)
+    },
+    onEasyLevelClick () {
+      this.level_selected = true
+      this.selected_questions = ref(this.easy_question)
+    },
+    categorizedQuestion () {
+      this.total_question = this.questions
+      this.difficult_question = this.questions.filter(({ level }) => level === 3)
+      this.moderate_question = this.questions.filter(({ level }) => level === 2)
+      this.easy_question = this.questions.filter(({ level }) => level === 1)
+    },
+    onEmptyQuestions () {
+      this.level_selected = false
+    },
+    onReset () {
+      this.dialog.warning({
+        title: "Are you sure?",
+        content: "All the data will be restored to default level.",
+        positiveText: "Sure",
+        negativeText: "Not Sure",
+        onEsc: () => {
+          this.message.warning("close by esc");
+        },
+        onPositiveClick: () => {
+          this.resetLevel()
+        }
+      });
 
-      }
+    }
   },
   mounted() {
     this.getQuestionsList()

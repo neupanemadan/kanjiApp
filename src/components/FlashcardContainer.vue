@@ -180,10 +180,10 @@ export default {
     }
   },
   props: {
-      questions: {
-        type: Array
-      }
+    questions: {
+      type: Array
     }
+  }
 };
 </script>
   
