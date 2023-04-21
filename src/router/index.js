@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const AppLayout = () =>  import('../components/AppLayout.vue')
 const Home = () =>  import( '../views/homePage.vue')
 const Questions = () =>  import( '../views/questionsList.vue')
+const Auth = () =>  import( '../views/authPage.vue')
 
 const routes = [
   {
@@ -21,6 +22,11 @@ const routes = [
         name: 'questions',
         path: '/questions'
       },
+      {
+        component: Auth,
+        name: 'auth',
+        path: '/auth'
+      }
     ],
     component: AppLayout,
     path: '/'

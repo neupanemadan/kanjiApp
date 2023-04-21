@@ -33,7 +33,7 @@ import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
 import { NIcon } from "naive-ui";
 import { defineComponent, h, ref, computed } from "vue";
-import { HomeOutline, EaselOutline} from "@vicons/ionicons5";
+import { HomeOutline, ListOutline, LogInOutline} from "@vicons/ionicons5";
 import { RouterLink, useRoute } from "vue-router";
 import { jaJP, dateJaJP } from "naive-ui";
 
@@ -68,7 +68,21 @@ const menus = [
         { default: () => "Questions" }
       ),
     key: "questions",
-    icon: renderIcon(EaselOutline)
+    icon: renderIcon(ListOutline)
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "auth"
+          }
+        },
+        { default: () => "Auth" }
+      ),
+    key: "auth",
+    icon: renderIcon(LogInOutline)
   }
 ];
 

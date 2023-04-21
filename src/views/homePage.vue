@@ -177,7 +177,7 @@ export default {
 </script>
 <style>
 #home {
-  padding: 5px;
+  padding: 13px;
   background: lightcyan;
 }
 .levels {

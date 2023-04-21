@@ -202,7 +202,7 @@ export default {
 </script>
 <style scoped>
 #home {
-  padding: 5px;
+  padding: 13px;
   background: lightcyan;
 }
 </style>
