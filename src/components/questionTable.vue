@@ -104,7 +104,7 @@
         disabled: false,
         dialog,
         loading: false,
-        height: ref(66),
+        height: ref(56),
         pagination: {
           pageSize: 25
         }

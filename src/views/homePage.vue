@@ -1,6 +1,6 @@
 <template>
     <div class="home-page">
-      <div id="app">
+      <div id="home">
         <flashcard-container
           :questions="selected_questions"
           @level:update="onLevelUpdate"
@@ -176,6 +176,10 @@ export default {
 };
 </script>
 <style>
+#home {
+  padding: 5px;
+  background: lightcyan;
+}
 .levels {
   max-width: 100vw;
 }

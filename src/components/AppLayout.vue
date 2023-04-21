@@ -113,14 +113,17 @@ export default defineComponent({
 </script>
 <style>
 #app {
+  background: lightcyan;
+  border-radius: 2rem;
   margin-left: 10vw;
   margin-right: 10vw;
-  padding: 0;
+  margin-top: 1vw;
+  padding: 1rem;
   height: 100%;
   min-width: 320px;
   --header-height: 64px;
-  --content-width: 92vw;
-  --content-max-width: calc(100vw - 20vw);
+  --content-width: 100vw;
+  --content-max-width: calc(100vw);
 }
 @media (max-width: 1200px) {
   #app {

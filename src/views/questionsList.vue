@@ -1,6 +1,5 @@
 <template>
-      <div class="home-page">
-      <div id="app">
+      <div id="home">
         <n-space justify="start" style="margin-bottom:0.8rem;">
           <n-button :disabled="disabled" @click="onClickCreate" type="primary" size="medium">
               <template #icon>
@@ -34,7 +33,6 @@
           </n-drawer-content>
         </n-drawer>
       </div>
-    </div>
 </template>
 
 <script>
@@ -202,3 +200,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+#home {
+  padding: 5px;
+  background: lightcyan;
+}
+</style>
