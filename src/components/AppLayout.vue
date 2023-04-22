@@ -241,7 +241,7 @@ export default defineComponent({
   border-radius: 2rem;
   margin-left: 10vw;
   margin-right: 10vw;
-  margin-top: 1vw;
+  margin-top: 0.5vw;
   padding: 1rem;
   height: 100%;
   min-width: 320px;
@@ -280,7 +280,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 10vh;
+  height: 6vh;
 }
 
 .navbar h2 {

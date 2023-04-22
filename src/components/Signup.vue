@@ -1,6 +1,6 @@
 <template>
     <div id="home">
-        <div class="register-form">
+    <div class="register-form" v-if="!verification_sent">
     <h1>Register</h1>
     <form @submit.prevent="register">
       <div class="form-group">
@@ -22,6 +22,10 @@
       </div>
     </form>
   </div>
+    <div class="register-form" v-if="verification_sent">
+      <p>Kindly validate your email via the verification link sent to your inbox before logging in. 
+        Upon successful verification, you will be automatically redirected to the login page.</p>
+    </div>
     </div>
 </template>
 
@@ -29,7 +33,7 @@
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
 import { ref, h } from 'vue'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, sendSignInLinkToEmail, onAuthStateChanged} from 'firebase/auth'
 import { useMessage, NAlert } from "naive-ui";
 import { useRouter } from "vue-router";
 
@@ -68,13 +72,23 @@ export default {
       router,
       email,
       password,
-      confirmPassword
+      confirmPassword,
+      verification_sent: false
     }
   },
   methods: {
     requestLogin () {
       const eventName =  "request:login";
       this.$emit(eventName);
+    },
+    
+    async  sendSignInLinkToEmailWithHandleCodeInApp(auth, email, url) {
+      const actionCodeSettings = {
+        url: url,
+        handleCodeInApp: true,
+      };
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+      localStorage.setItem("emailForSignIn", email);
     },
     async register  ()  {
       if (this.password !== this.confirmPassword) {
@@ -87,19 +101,40 @@ export default {
       }
 
       try {
-        const auth = getAuth()
-        await createUserWithEmailAndPassword(auth, this.email, this.password)
-        // const user = userCredential.user
-        // console.log(user)
-        // this.requestLogin()
-        this.router.push({ name: "home" });
-        this.message.success("User created and logged in with provided details successfully. ", {
-          render: renderMessage,
-          closable: true,
-          duration: 5000
+        const auth = getAuth();
+        
+        // Send sign-in link to email
+        await this.sendSignInLinkToEmailWithHandleCodeInApp(
+          auth,
+          this.email,
+          "http://localhost:8080"
+        );
+
+        // Wait for email to be verified
+        await onAuthStateChanged(auth, async (user) => {
+            if (user && user.emailVerified) {
+            const userCredential = await createUserWithEmailAndPassword(
+              auth,
+              this.email,
+              this.password
+            );
+            const user = userCredential.user;
+            console.log(user)
+            // User has verified their email, log them in and redirect to home
+            await signInWithEmailAndPassword(auth, this.email, this.password);
+            this.verification_sent = true
+
+          } else {
+            this.message.warning("Please verify your email before logging in.", {
+              render: renderMessage,
+              closable: true,
+              duration: 5000
+            });
+          }
         });
       } catch (error) {
-        this.message.error("Got an error on regestering the user.", {
+        console.log(error)
+        this.message.error("Got an error on registering the user.", {
           render: renderMessage,
           closable: true,
           duration: 5000
@@ -113,10 +148,15 @@ export default {
 .register-form {
   max-width: 400px;
   margin: 0 auto;
-  padding:2vw 4vw 2vw 2vw;
+  padding:1vw 4vw 1vw 2vw;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: lightblue
+}
+@media (max-width: 678px) {
+    .register-form {
+    padding:1vw 7vw 2vw 1vw;
+  }
 }
 
 h1 {
@@ -124,14 +164,14 @@ h1 {
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 label {
   display: block;
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 }
 
 input[type="username"],
@@ -142,18 +182,18 @@ input[type="password"] {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .submit-button {
   display: block;
   margin: 0 auto;
-  padding: 10px 20px;
+  padding: 8px 16px;
   background-color: #3490dc;
   color: #fff;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
 }
 
