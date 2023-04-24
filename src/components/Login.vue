@@ -74,13 +74,34 @@ export default {
     async login() {
       const auth = getAuth();
       try {
-        await signInWithEmailAndPassword(auth, this.email, this.password);
-        this.router.push({ name: "home" });
-        this.message.success("Logged in successfully. ", {
-          render: renderMessage,
-          closable: true,
-          duration: 5000
+        await signInWithEmailAndPassword(auth, this.email, this.password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          if (user && user.emailVerified) {
+            this.router.push({ name: "home" });
+            this.message.success("Logged in successfully. ", {
+              render: renderMessage,
+              closable: true,
+              duration: 5000
+            });
+            localStorage.setItem("loggedInUser", this.email);
+          } else if (user && !user.emailVerified) {
+            // User is logged in but their email address is not verified
+            auth.signOut();
+            this.message.warning("Please verify you email first. ", {
+              render: renderMessage,
+              closable: true,
+              duration: 5000
+            });
+          } else {
+            this.message.warning("Something went wrong. please contact at nmadan692@gmail.com.", {
+            render: renderMessage,
+            closable: true,
+            duration: 5000
         });
+          }
+        })
       } catch (error) {
         this.message.error("Logging error! Check your logins detail.", {
           render: renderMessage,

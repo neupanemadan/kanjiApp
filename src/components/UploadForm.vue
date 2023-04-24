@@ -103,10 +103,12 @@ export default defineComponent({
       });
     },
     getFormData() {
+      console.log(this.currentUser)
       const data = {
         itemId: this.deck.itemId?this.deck.itemId:this.generateItemId(), // generate a unique ID for the item
         question: this.deck.question,
         answer: this.deck.answer,
+        currentUser:localStorage.getItem("loggedInUser"),
         level: this.deck.level
       };
       return data;
@@ -114,7 +116,7 @@ export default defineComponent({
     generateItemId() {
       // generate a unique ID using the current timestamp
       return Date.now().toString();
-    }
-  }
+    },
+  },
 })
 </script>

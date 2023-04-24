@@ -91,8 +91,10 @@ export default {
       const itemsRef = dbRef(db, 'studymate');
 
       // Set up a listener for changes to the "items" node
+      let filtered_questions = []
       onValue(itemsRef, (snapshot) => {
-        this.questions = Object.values(snapshot.val());
+        filtered_questions = Object.values(snapshot.val());
+        this.questions = filtered_questions.filter(({currentUser}) => currentUser === localStorage.getItem('loggedInUser'))
       });
       return {
         questions: ref(this.questions)

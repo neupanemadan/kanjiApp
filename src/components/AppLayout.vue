@@ -190,7 +190,7 @@ export default defineComponent({
     checkLogin() {
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
-        if (user) {
+        if (user && user.emailVerified) {
           this.currentUser = user.email;
         } else {
           this.currentUser = null;
@@ -200,6 +200,7 @@ export default defineComponent({
     logout() {
       console.log('----------------on logout---------------')
       const auth = getAuth();
+      localStorage.removeItem("loggedInUser")
       signOut(auth)
         .then(() => {
           this.router.push({ name: "auth" });
@@ -217,6 +218,7 @@ export default defineComponent({
             duration: 5000
           });
         });
+        localStorage.setItem("loggedInUser", email);
     },
     getMenus () {
       console.log('-------getMenus---------')

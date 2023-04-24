@@ -33,7 +33,7 @@
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
 import { ref, h } from 'vue'
-import { getAuth, createUserWithEmailAndPassword, sendSignInLinkToEmail, onAuthStateChanged, applyActionCode} from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, applyActionCode} from 'firebase/auth'
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { useMessage, NAlert } from "naive-ui";
 import { useRouter } from "vue-router";
@@ -83,13 +83,10 @@ export default {
       this.$emit(eventName);
     },
     
-    async  sendSignInLinkToEmailWithHandleCodeInApp(auth, email, url) {
-      const actionCodeSettings = {
+    async sendEmailVerificationWithHandleCodeInApp(auth, email, url) {
+      await sendEmailVerification(auth.currentUser, {
         url: url,
-        handleCodeInApp: true,
-      };
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      localStorage.setItem("emailForSignIn", email);
+      });
     },
     async register  ()  {
       if (this.password !== this.confirmPassword) {
@@ -104,13 +101,26 @@ export default {
       try {
         const auth = getAuth();
         
-        // Send sign-in link to email
-        await this.sendSignInLinkToEmailWithHandleCodeInApp(
+        // Create user in database with email as unverified
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          this.email,
+          this.password
+        );
+        this.verification_sent = true
+
+        const user = userCredential.user;
+
+        console.log('----------------------')
+        console.log(user)
+        console.log('----------------------')
+
+        // Send verification email to user
+        await this.sendEmailVerificationWithHandleCodeInApp(
           auth,
           this.email,
           "http://localhost:8080"
         );
-        this.verification_sent = true
 
         this.message.success("Verification email sent! Please check your inbox.", {
           render: renderMessage,
@@ -118,39 +128,6 @@ export default {
           duration: 5000,
         });
 
-        // Wait for email to be verified
-        // await onAuthStateChanged(auth, async (user) => {
-        //     if (user && user.emailVerified) {
-        //     const userCredential = await createUserWithEmailAndPassword(
-        //       auth,
-        //       this.email,
-        //       this.password
-        //     );
-        //     const user = userCredential.user;
-        //     console.log(user)
-        //     // User has verified their email, log them in and redirect to home
-        //     await signInWithEmailAndPassword(auth, this.email, this.password);
-
-        //   } else {
-        //     this.message.warning("Please verify your email before logging in.", {
-        //       render: renderMessage,
-        //       closable: true,
-        //       duration: 5000
-        //     });
-        //   }
-        // });
-      // Complete user registration after email is verified
-      auth.applyActionCode(localStorage.getItem("emailForSignIn")).then(async () => {
-          // Create user in database
-          const userRef = collection(firestore, "users");
-          const newUser = await addDoc(userRef, {
-            email: localStorage.getItem("emailForSignIn"),
-            name: this.name,
-          });
-          console.log("New user created with ID: ", newUser.id);
-        }).catch((error) => {
-          console.error(error);
-        });
       } catch (error) {
         console.log(error)
         this.message.error("Got an error on registering the user.", {
