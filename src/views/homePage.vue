@@ -68,7 +68,7 @@ export default {
       // Set up a listener for changes to the "items" node
       onValue(itemsRef, (snapshot) => {
         const data = Object.values(snapshot.val())
-        this.questions = data.filter(({currentUser}) => currentUser === localStorage.getItem('loggedInUser'))
+        this.questions = data.filter(({currentUser}) => currentUser === localStorage.getItem('emailForSignIn'))
         this.total_question = this.questions 
         this.difficult_question = this.questions .filter(({ level }) => level === 3)
         this.moderate_question = this.questions .filter(({ level }) => level === 2)

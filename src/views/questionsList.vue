@@ -94,7 +94,7 @@ export default {
       let filtered_questions = []
       onValue(itemsRef, (snapshot) => {
         filtered_questions = Object.values(snapshot.val());
-        this.questions = filtered_questions.filter(({currentUser}) => currentUser === localStorage.getItem('loggedInUser'))
+        this.questions = filtered_questions.filter(({currentUser}) => currentUser === localStorage.getItem('emailForSignIn'))
       });
       return {
         questions: ref(this.questions)

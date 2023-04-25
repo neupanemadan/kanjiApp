@@ -127,7 +127,7 @@ export default {
         itemId : item_id,
         question : this.questions[this.currentCardIndex].question,
         answer : this.questions[this.currentCardIndex].answer,
-        currentUser : localStorage.getItem('loggedInUser'),
+        currentUser : localStorage.getItem('emailForSignIn'),
         level : this.getSelectedLevel(selectedLevel)
       }
 

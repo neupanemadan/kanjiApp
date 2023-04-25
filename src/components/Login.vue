@@ -85,7 +85,7 @@ export default {
                 closable: true,
                 duration: 5000
               });
-              localStorage.setItem("loggedInUser", this.email);
+              localStorage.setItem("emailForSignIn", this.email);
             } else if (user && !user.emailVerified) {
               // User is logged in but their email address is not verified
               auth.signOut();

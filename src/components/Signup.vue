@@ -33,8 +33,7 @@
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
 import { ref, h } from 'vue'
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, applyActionCode} from 'firebase/auth'
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, fetchSignInMethodsForEmail} from 'firebase/auth'
 import { useMessage, NAlert } from "naive-ui";
 import { useRouter } from "vue-router";
 
@@ -114,6 +113,18 @@ export default {
 
       try {
         const auth = getAuth();
+
+        // Check if email already exists
+        const existingUsers = await fetchSignInMethodsForEmail(auth, this.email);
+        if (existingUsers.length > 0) {
+          // Email already in use
+          this.message.warning("Email already in use.", {
+            render: renderMessage,
+            closable: true,
+            duration: 5000
+          });
+          return;
+        }
         
         // Create user in database with email as unverified
         const userCredential = await createUserWithEmailAndPassword(
@@ -135,7 +146,7 @@ export default {
         await this.sendEmailVerificationWithHandleCodeInApp(
           auth,
           this.email,
-          "http://localhost:8080"
+          "https://kanjiapp.neupanemadan.com.np/"
         );
 
 

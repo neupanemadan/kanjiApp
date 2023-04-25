@@ -108,7 +108,7 @@ export default defineComponent({
         itemId: this.deck.itemId?this.deck.itemId:this.generateItemId(), // generate a unique ID for the item
         question: this.deck.question,
         answer: this.deck.answer,
-        currentUser:localStorage.getItem("loggedInUser"),
+        currentUser:localStorage.getItem("emailForSignIn"),
         level: this.deck.level
       };
       return data;

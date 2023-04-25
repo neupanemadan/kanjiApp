@@ -8,7 +8,7 @@
     <n-dialog-provider>
           <div class="row navbar">
             <div class="col-4">
-              <h2>studyMate</h2>
+              <h2>kanjiMate</h2>
             </div>
             <div class="col-8 menus">
               <n-menu v-model:value="activeKey" mode="horizontal" :options="getMenus()" />
@@ -200,7 +200,7 @@ export default defineComponent({
     logout() {
       console.log('----------------on logout---------------')
       const auth = getAuth();
-      localStorage.removeItem("loggedInUser")
+      localStorage.removeItem("emailForSignIn")
       signOut(auth)
         .then(() => {
           this.router.push({ name: "auth" });
@@ -218,7 +218,7 @@ export default defineComponent({
             duration: 5000
           });
         });
-        localStorage.setItem("loggedInUser", this.currentUser);
+        localStorage.setItem("emailForSignIn", this.currentUser);
     },
     getMenus () {
       console.log('-------getMenus---------')
