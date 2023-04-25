@@ -1,32 +1,32 @@
 <template>
-    <div id="home">
+  <div id="home">
     <div class="register-form" v-if="!verification_sent">
-    <h1>Register</h1>
-    <form @submit.prevent="register">
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required>
-      </div>
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" v-model="confirmPassword" required>
-      </div>
-      <button class="submit-button" type="submit">Register</button>
-      <div class="create-account">
-        <p>Already Have account?</p>
-        <button class="create-btn" @click="requestLogin">Login</button>
-      </div>
-    </form>
-  </div>
-    <div class="register-form" v-if="verification_sent">
+      <h1>Register</h1>
+      <form @submit.prevent="register">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" v-model="email" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" v-model="password" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password:</label>
+          <input type="password" id="confirmPassword" v-model="confirmPassword" required>
+        </div>
+        <button class="submit-button" type="submit">Register</button>
+        <div class="create-account">
+          <p>Already Have account?</p>
+          <button class="create-btn" @click="requestLogin">Login</button>
+        </div>
+      </form>
+    </div>
+    <div class="register-form" v-else>
       <p>Kindly validate your email via the verification link sent to your inbox before logging in. 
-        Upon successful verification, you will be automatically redirected to the login page.</p>
+        With successful verification, you can continue through email link or you can login through <button class="login-btn" @click="loginPage()">Login page</button> after verification.</p>
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -61,10 +61,11 @@ const renderMessage = props => {
 };
 
 export default {
-  setup() {
+  data() {
     const email = ref('')
     const password = ref('')
     const confirmPassword = ref('')
+    const verification_sent = false
     const message = useMessage()
     const router = useRouter()
 
@@ -74,7 +75,7 @@ export default {
       email,
       password,
       confirmPassword,
-      verification_sent: false
+      verification_sent
     }
   },
   methods: {
@@ -84,13 +85,26 @@ export default {
     },
     
     async sendEmailVerificationWithHandleCodeInApp(auth, email, url) {
+
       await sendEmailVerification(auth.currentUser, {
         url: url,
       });
     },
+    loginPage () {
+      window.location.reload();
+    },
     async register  ()  {
       if (this.password !== this.confirmPassword) {
         this.message.warning("Passwords do not match!! ", {
+          render: renderMessage,
+          closable: true,
+          duration: 5000
+        });
+        return
+      }
+
+      if (this.password.length < 6 || this.confirmPassword.length < 6) {
+        this.message.warning("Minimum 6 letters password needed!! ", {
           render: renderMessage,
           closable: true,
           duration: 5000
@@ -107,12 +121,14 @@ export default {
           this.email,
           this.password
         );
+        
         this.verification_sent = true
 
         const user = userCredential.user;
 
         console.log('----------------------')
         console.log(user)
+        console.log(this.verification_sent)
         console.log('----------------------')
 
         // Send verification email to user
@@ -122,11 +138,13 @@ export default {
           "http://localhost:8080"
         );
 
+
         this.message.success("Verification email sent! Please check your inbox.", {
           render: renderMessage,
           closable: true,
           duration: 5000,
         });
+
 
       } catch (error) {
         console.log(error)

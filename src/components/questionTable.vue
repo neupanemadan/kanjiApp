@@ -10,6 +10,7 @@
           :style="{ height: `${height}vh` }"
           size="small"
           flex-height
+          :scroll-x="320"
         />
       </n-card>
   </template>
@@ -23,15 +24,18 @@ const createColumns = ({ updateHandler, deleteHandler }) => {
   return [
     {
       title: "Question",
-      key: "question"
+      key: "question",
+      width: 80,
     },
     {
       title: "Answer",
-      key: "answer"
+      key: "answer",
+      width: 80,
     },
     {
       title: "Level",
-      key: "level"
+      key: "level",
+      width: 80,
     },
     {
       title: "Actions",

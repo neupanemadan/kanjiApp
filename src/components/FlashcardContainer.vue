@@ -127,6 +127,7 @@ export default {
         itemId : item_id,
         question : this.questions[this.currentCardIndex].question,
         answer : this.questions[this.currentCardIndex].answer,
+        currentUser : localStorage.getItem('loggedInUser'),
         level : this.getSelectedLevel(selectedLevel)
       }
 
@@ -225,7 +226,6 @@ export default {
 }
 .alert-message {
   margin: 2rem;
-  margin-left: -3rem;
 }
   </style>
   

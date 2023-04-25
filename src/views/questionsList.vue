@@ -20,7 +20,7 @@
           :close-on-esc="false"
           :mask-closable="false"
           @update:show="onUpdateDrawer"
-            width="500px"
+            width="400px"
           placement="left"
         >
          <n-drawer-content title="Upload Data" closable :native-scrollbar="false">

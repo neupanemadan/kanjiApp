@@ -193,6 +193,11 @@ export default {
   /* On hover, scale the element up to 1.1 */
   transform: scale(1.1);
 }
+@media (max-width: 450px) {
+  .level-card{
+    height: 28vw;
+  }
+}
 .all-level {
   background: gainsboro;
   color: black;

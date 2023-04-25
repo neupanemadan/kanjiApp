@@ -218,7 +218,7 @@ export default defineComponent({
             duration: 5000
           });
         });
-        localStorage.setItem("loggedInUser", email);
+        localStorage.setItem("loggedInUser", this.currentUser);
     },
     getMenus () {
       console.log('-------getMenus---------')
@@ -304,4 +304,9 @@ export default defineComponent({
     background: lightcyan;
     text-align: right;
   }
+  @media (max-width: 1200px) {
+    .logout-form {
+    margin-top: 8vw;
+  }
+}
 </style>
