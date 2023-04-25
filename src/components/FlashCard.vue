@@ -50,7 +50,7 @@ export default {
 
 <style scoped>
 .flashcard {
-  height: 58vh;
+  height: 53vh;
   perspective: 1000px;
   border-radius: 2%;
   margin-bottom: 7%;

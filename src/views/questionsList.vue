@@ -93,8 +93,10 @@ export default {
       // Set up a listener for changes to the "items" node
       let filtered_questions = []
       onValue(itemsRef, (snapshot) => {
-        filtered_questions = Object.values(snapshot.val());
-        this.questions = filtered_questions.filter(({currentUser}) => currentUser === localStorage.getItem('emailForSignIn'))
+        if (snapshot.val()){
+          filtered_questions = Object.values(snapshot.val());
+          this.questions = filtered_questions.filter(({currentUser}) => currentUser === localStorage.getItem('emailForSignIn'))
+        }
       });
       return {
         questions: ref(this.questions)
@@ -135,9 +137,7 @@ export default {
       // Create a Firebase query to search for the record with the given itemId
       const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
 
-      console.log('itemRef', itemId)
-      console.log('itemRef', queryRef)
-
+        
       // Attach a listener to the query to get the snapshot of the record
       onChildAdded(queryRef, (snapshot) => {
         // Get the reference to the record using the snapshot key
@@ -171,13 +171,11 @@ export default {
       // Create a Firebase query to search for the record with the given itemId
       const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
 
-      console.log(queryRef)
       // Attach a listener to the query to get the snapshot of the record
       onChildAdded(queryRef, (snapshot) => {
         // Get the reference to the record using the snapshot key
         const itemToEditRef = child(itemsRef, snapshot.key);
 
-        console.log(itemToEditRef)
         // Update the item in the database
         set(itemToEditRef, data)
           .then(() => {

@@ -24,7 +24,7 @@
     </div>
     <div class="register-form" v-else>
       <p>Kindly validate your email via the verification link sent to your inbox before logging in. 
-        With successful verification, you can continue through email link or you can login through <button class="login-btn" @click="loginPage()">Login page</button> after verification.</p>
+        With successful verification, you can continue through email link or you can login through <button class="login-btn" @click="requestLogin()">Login page</button> after verification.</p>
     </div>
   </div>
 </template>
@@ -89,9 +89,6 @@ export default {
         url: url,
       });
     },
-    loginPage () {
-      window.location.reload();
-    },
     async register  ()  {
       if (this.password !== this.confirmPassword) {
         this.message.warning("Passwords do not match!! ", {
@@ -139,7 +136,6 @@ export default {
 
         console.log('----------------------')
         console.log(user)
-        console.log(this.verification_sent)
         console.log('----------------------')
 
         // Send verification email to user

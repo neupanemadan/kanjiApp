@@ -168,6 +168,7 @@ export default {
     totalQuestions() {
       return this.questions.length;
     },
+    // eslint-disable-next-line vue/return-in-computed-property
     difficultyLevel () {
       if (this.questions.length > 0) {
         if (this.questions[this.currentCardIndex].level === 1) {

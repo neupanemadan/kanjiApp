@@ -116,14 +116,8 @@ export default {
       // Set up a listener for changes to the "items" node
       onValue(itemsRef, (snapshot) => {
         const items = snapshot.val();
-        let count = 0
         for (let itemKey in items) {
           const itemToEditRef = child(itemsRef, itemKey);
-          console.log(count)
-          count = count + 1
-          if (count === 320) {
-            break
-          }
           update(itemToEditRef, { level: 0});
         }
       });

@@ -32,7 +32,7 @@
 <script>
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, fetchSignInMethodsForEmail } from 'firebase/auth';
 import { h } from "vue";
 import { useRouter } from "vue-router";
 import { useMessage, NAlert } from "naive-ui";
@@ -72,8 +72,19 @@ export default {
   },
   methods: {
     async login() {
-      const auth = getAuth();
       try {
+        const auth = getAuth();
+        // Check if email already exists
+        const existingUsers = await fetchSignInMethodsForEmail(auth, this.email);
+        if (existingUsers.length === 0) {
+          // Email already in use
+          this.message.warning("This email has not been regestered yet!! create a new account.", {
+            render: renderMessage,
+            closable: true,
+            duration: 5000
+          });
+          return;
+        }
         await signInWithEmailAndPassword(auth, this.email, this.password)
           .then((userCredential) => {
             const user = userCredential.user;

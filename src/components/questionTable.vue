@@ -24,18 +24,11 @@ const createColumns = ({ updateHandler, deleteHandler }) => {
   return [
     {
       title: "Question",
-      key: "question",
-      width: 80,
+      key: "question"
     },
     {
       title: "Answer",
-      key: "answer",
-      width: 80,
-    },
-    {
-      title: "Level",
-      key: "level",
-      width: 80,
+      key: "answer"
     },
     {
       title: "Actions",

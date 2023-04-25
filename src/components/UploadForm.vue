@@ -103,7 +103,6 @@ export default defineComponent({
       });
     },
     getFormData() {
-      console.log(this.currentUser)
       const data = {
         itemId: this.deck.itemId?this.deck.itemId:this.generateItemId(), // generate a unique ID for the item
         question: this.deck.question,

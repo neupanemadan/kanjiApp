@@ -161,7 +161,6 @@ export default defineComponent({
     // }
 
     const logoutUser = () => {
-      console.log('----------------on logout---------------')
       const auth = getAuth();
       signOut(auth)
         .then(() => {
@@ -198,7 +197,6 @@ export default defineComponent({
       });
     },
     logout() {
-      console.log('----------------on logout---------------')
       const auth = getAuth();
       localStorage.removeItem("emailForSignIn")
       signOut(auth)
@@ -218,13 +216,9 @@ export default defineComponent({
             duration: 5000
           });
         });
-        localStorage.setItem("emailForSignIn", this.currentUser);
+      localStorage.setItem("emailForSignIn", this.currentUser);
     },
     getMenus () {
-      console.log('-------getMenus---------')
-      console.log(menus)
-      console.log(userOnlyMenus)
-      console.log(this.currentUser)
       let menu = menus;
       if (this.currentUser) {
         menu = userOnlyMenus
