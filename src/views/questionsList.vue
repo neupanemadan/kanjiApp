@@ -20,10 +20,10 @@
           :close-on-esc="false"
           :mask-closable="false"
           @update:show="onUpdateDrawer"
-          width="500px"
+            width="400px"
           placement="left"
         >
-          <n-drawer-content title="Upload Data" closable :native-scrollbar="false">
+         <n-drawer-content title="Upload Data" closable :native-scrollbar="false">
             <upload-form
               @question:create="onQuestionCreate"
               @question:update="onQuestionUpdate"
@@ -84,43 +84,47 @@ export default {
       this.active = true
     },
     questionsList () {
-        // Get a reference to the Firebase Realtime Database
-        const db = getDatabase();
+      // Get a reference to the Firebase Realtime Database
+      const db = getDatabase();
 
-        // Create a reference to the "studymate" node in the database
-        const itemsRef = dbRef(db, 'studymate');
+      // Create a reference to the "studymate" node in the database
+      const itemsRef = dbRef(db, 'studymate');
 
-        // Set up a listener for changes to the "items" node
-        onValue(itemsRef, (snapshot) => {
-            this.questions = Object.values(snapshot.val());
-        });
-        return {
-            questions: ref(this.questions)
-        };
+      // Set up a listener for changes to the "items" node
+      let filtered_questions = []
+      onValue(itemsRef, (snapshot) => {
+        if (snapshot.val()){
+          filtered_questions = Object.values(snapshot.val());
+          this.questions = filtered_questions.filter(({currentUser}) => currentUser === localStorage.getItem('emailForSignIn'))
+        }
+      });
+      return {
+        questions: ref(this.questions)
+      };
     },
     onQuestionCreate (data) {
-        // Get a reference to the Firebase Realtime Database
-        const db = getDatabase();
+      // Get a reference to the Firebase Realtime Database
+      const db = getDatabase();
 
-        // Create a reference to the "studymate" node in the database
-        const itemsRef = dbRef(db, 'studymate');
+      // Create a reference to the "studymate" node in the database
+      const itemsRef = dbRef(db, 'studymate');
 
 
-        // Generate a new unique ID for the item
-        const newItemRef = push(itemsRef);
+      // Generate a new unique ID for the item
+      const newItemRef = push(itemsRef);
 
-        // Save the data to the database
-        set(newItemRef, data)
+      // Save the data to the database
+      set(newItemRef, data)
         .then(() => {
           this.active = false
           this.message.success("Question added successfully. ", {
-              render: renderMessage,
-              closable: true,
-              duration: 5000
-            });
+            render: renderMessage,
+            closable: true,
+            duration: 5000
+          });
         })
         .catch((error) => {
-            console.error('Error saving data: ', error);
+          console.error('Error saving data: ', error);
         });
     },
     onQuestionDelete (itemId) {
@@ -133,9 +137,7 @@ export default {
       // Create a Firebase query to search for the record with the given itemId
       const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
 
-      console.log('itemRef', itemId)
-      console.log('itemRef', queryRef)
-
+        
       // Attach a listener to the query to get the snapshot of the record
       onChildAdded(queryRef, (snapshot) => {
         // Get the reference to the record using the snapshot key
@@ -144,12 +146,12 @@ export default {
         // Remove the item from the database
         remove(itemToDeleteRef)
           .then(() => {
-              this.message.success("Question deleted successfully. ", {
-                render: renderMessage,
-                closable: true,
-                duration: 5000
-              });
-            })
+            this.message.success("Question deleted successfully. ", {
+              render: renderMessage,
+              closable: true,
+              duration: 5000
+            });
+          })
           .catch((error) => {
             console.error('Error deleting record: ', error);
           });
@@ -160,39 +162,37 @@ export default {
       this.selectedQuestion = data
     },
     onQuestionUpdate(itemId, data) {
-        // Get a reference to the Firebase Realtime Database
-        const db = getDatabase();
+      // Get a reference to the Firebase Realtime Database
+      const db = getDatabase();
 
-        // Create a reference to the "studymate" node in the database
-        const itemsRef = dbRef(db, 'studymate');
+      // Create a reference to the "studymate" node in the database
+      const itemsRef = dbRef(db, 'studymate');
 
-        // Create a Firebase query to search for the record with the given itemId
-        const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
+      // Create a Firebase query to search for the record with the given itemId
+      const queryRef = query(itemsRef, orderByChild('itemId'), equalTo(itemId));
 
-        console.log(queryRef)
-        // Attach a listener to the query to get the snapshot of the record
-        onChildAdded(queryRef, (snapshot) => {
-          // Get the reference to the record using the snapshot key
-          const itemToEditRef = child(itemsRef, snapshot.key);
+      // Attach a listener to the query to get the snapshot of the record
+      onChildAdded(queryRef, (snapshot) => {
+        // Get the reference to the record using the snapshot key
+        const itemToEditRef = child(itemsRef, snapshot.key);
 
-          console.log(itemToEditRef)
-          // Update the item in the database
-          set(itemToEditRef, data)
-            .then(() => {
-              this.active = false
-              this.selectedQuestion = null
-              this.message.success("Question Updated successfully. ", {
-                render: renderMessage,
-                closable: true,
-                duration: 5000
-              });
-            })
-            .catch((error) => {
-              console.error('Error updating record: ', error);
+        // Update the item in the database
+        set(itemToEditRef, data)
+          .then(() => {
+            this.active = false
+            this.selectedQuestion = null
+            this.message.success("Question Updated successfully. ", {
+              render: renderMessage,
+              closable: true,
+              duration: 5000
             });
-        });
+          })
+          .catch((error) => {
+            console.error('Error updating record: ', error);
+          });
+      });
 
-      }
+    }
 
   },
   mounted() {
@@ -202,7 +202,7 @@ export default {
 </script>
 <style scoped>
 #home {
-  padding: 5px;
+  padding: 13px;
   background: lightcyan;
 }
 </style>

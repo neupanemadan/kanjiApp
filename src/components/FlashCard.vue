@@ -50,12 +50,18 @@ export default {
 
 <style scoped>
 .flashcard {
-  height: 58vh;
+  height: 53vh;
   perspective: 1000px;
   border-radius: 2%;
   margin-bottom: 7%;
   transition: transform 0.6s;
   transform-style: preserve-3d;
+}
+
+@media (max-width: 678px) {
+  .flashcard{
+    height: 50vh;
+  }
 }
 
 .front,
@@ -73,9 +79,11 @@ export default {
   justify-content: center;
   border-radius: 2%;
   align-items: center;
-  font-size: 3rem;
+  font-size: 250%;
   transition: transform 0.6s;
   transform-style: preserve-3d;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .front:hover {
@@ -96,6 +104,8 @@ export default {
   align-items: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .back:hover {

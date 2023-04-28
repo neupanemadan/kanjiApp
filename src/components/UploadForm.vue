@@ -4,10 +4,10 @@
       <n-gi>
         <n-card title="Add a new word" embedded :bordered="true">
           <n-grid :span="24" :x-gap="24">
-            <n-form-item-gi span="16" label="Question" path="question">
+            <n-form-item-gi span="14" label="Question" path="question">
               <n-input v-model:value="deck.question" placeholder="Question" size="large" />
             </n-form-item-gi>
-            <n-form-item-gi span="16" label="level" path="level">
+            <n-form-item-gi span="14" label="level" path="level">
               <n-select
                 filterable
                 placeholder="Select level"
@@ -16,14 +16,14 @@
                 size="large"
               />
             </n-form-item-gi>
-            <n-form-item-gi span="16" label="Answer" path="answer">
+            <n-form-item-gi span="14" label="Answer" path="answer">
                 <n-input
                     v-model:value="deck.answer"
                     type="textarea"
                     placeholder="Answer"
                 />
             </n-form-item-gi>
-            <n-gi span="9" :x-gap="5">
+            <n-gi span="14" :x-gap="5">
               <n-button
                 @click="onSubmit"
                 :loading="loading"
@@ -107,6 +107,7 @@ export default defineComponent({
         itemId: this.deck.itemId?this.deck.itemId:this.generateItemId(), // generate a unique ID for the item
         question: this.deck.question,
         answer: this.deck.answer,
+        currentUser:localStorage.getItem("emailForSignIn"),
         level: this.deck.level
       };
       return data;
@@ -114,7 +115,7 @@ export default defineComponent({
     generateItemId() {
       // generate a unique ID using the current timestamp
       return Date.now().toString();
-    }
-      }
+    },
+  },
 })
 </script>

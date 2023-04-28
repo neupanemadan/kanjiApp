@@ -127,6 +127,7 @@ export default {
         itemId : item_id,
         question : this.questions[this.currentCardIndex].question,
         answer : this.questions[this.currentCardIndex].answer,
+        currentUser : localStorage.getItem('emailForSignIn'),
         level : this.getSelectedLevel(selectedLevel)
       }
 
@@ -167,6 +168,7 @@ export default {
     totalQuestions() {
       return this.questions.length;
     },
+    // eslint-disable-next-line vue/return-in-computed-property
     difficultyLevel () {
       if (this.questions.length > 0) {
         if (this.questions[this.currentCardIndex].level === 1) {
@@ -180,10 +182,10 @@ export default {
     }
   },
   props: {
-      questions: {
-        type: Array
-      }
+    questions: {
+      type: Array
     }
+  }
 };
 </script>
   
@@ -225,7 +227,6 @@ export default {
 }
 .alert-message {
   margin: 2rem;
-  margin-left: -3rem;
 }
   </style>
   
